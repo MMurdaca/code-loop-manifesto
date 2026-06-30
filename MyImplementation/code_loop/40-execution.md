@@ -6,13 +6,12 @@
 - Layer: Execution
 - Status: Active
 - Applies To: Implementation, refactoring, testing, integration
-- Version: 3.0
 
 ## Purpose
 
 Governare il layer Execution in modo che l'implementazione resti allineata al Design Artifact e produca evidenza verificabile invece di deviazioni implicite.
 
-In V3 l'Execution deve anche rispettare esplicitamente quality policy, truthfulness tecnica e aggiornamento dello stato degli artifact.
+L'Execution deve anche rispettare esplicitamente quality policy, truthfulness tecnica, aggiornamento dello stato degli artifact e blocco dell'implementazione silenziosa di architectural contract drift.
 
 ## Scope
 
@@ -24,7 +23,8 @@ Questa rule si applica alla generazione del codice, ai refactoring, ai test, all
 2. eventuali exception o re-validation request approvate;
 3. criteri di validazione definiti upstream;
 4. Artifact Tree Overview corrente;
-5. contratti, assunzioni e condizioni residue dichiarate nel Design Artifact.
+5. contratti, assunzioni e condizioni residue dichiarate nel Design Artifact;
+6. drift decision approvata, quando il Design dichiara architectural contract drift.
 
 ## Required Outputs
 
@@ -40,7 +40,8 @@ Uno o piu' Execution Artifact che, per ciascun ramo rilevante, dichiarino almeno
 8. files, modules or components touched;
 9. verification commands or manual evidence;
 10. Artifact Tree Overview status update;
-11. assumptions confirmed or invalidated during execution.
+11. assumptions confirmed or invalidated during execution;
+12. drift impact result quando l'implementazione tocca identita', identificativi, relazioni dati, invarianti o contratti condivisi.
 
 ## Mandatory Behaviors
 
@@ -53,7 +54,9 @@ Uno o piu' Execution Artifact che, per ciascun ramo rilevante, dichiarino almeno
 7. verificare l'esistenza e il comportamento di API, librerie o file prima di basarci decisioni critiche;
 8. mantenere codice leggibile, manutenibile e coerente con i contratti approvati;
 9. preferire soluzioni semplici, robuste e sufficienti ai requisiti;
-10. aggiornare lo stato del ramo implementato quando passa a `IN_PROGRESS`, `READY_FOR_VALIDATION`, `COMPLETED`, `BLOCKED` o stato equivalente.
+10. aggiornare lo stato del ramo implementato quando passa a `IN_PROGRESS`, `READY_FOR_VALIDATION`, `COMPLETED`, `BLOCKED` o stato equivalente;
+11. fermare l'implementazione e aprire richiesta upward quando emerge architectural contract drift non gia' approvato dal Design e dal gate corretto;
+12. distinguere `mitigation implemented` da `drift approved`: una mitigazione locale non approva il cambio di contratto.
 
 ## Forbidden Behaviors
 
@@ -64,7 +67,9 @@ Uno o piu' Execution Artifact che, per ciascun ramo rilevante, dichiarino almeno
 5. continuare il lavoro su un ramo dopo un checkpoint fallito senza gate o risalita esplicita;
 6. inventare risultati di test, output, metriche o comportamento non verificato;
 7. introdurre complessita' non richiesta per rendere la soluzione piu' sofisticata;
-8. lasciare che il codice diventi l'unica documentazione del razionale operativo.
+8. lasciare che il codice diventi l'unica documentazione del razionale operativo;
+9. cambiare identita', identificativi, relazioni dati, invarianti o contratti condivisi direttamente nel codice senza parent impact analysis e gate;
+10. aggiornare test e documentazione per normalizzare un drift non approvato.
 
 ## Validation Requirements
 
@@ -77,7 +82,8 @@ L'Execution Artifact e' valido solo se:
 5. rende leggibile a quale parent e a quale scope di design appartiene il ramo implementato;
 6. distingue test eseguiti, test non eseguiti e verifiche non disponibili;
 7. aggiorna o propone l'aggiornamento dello stato dell'artifact tree;
-8. non richiede di dedurre dalla conversazione cosa e' stato fatto.
+8. non richiede di dedurre dalla conversazione cosa e' stato fatto;
+9. dichiara se sono stati toccati contratti architetturali e quale decisione di drift policy li autorizza.
 
 ## Escalation Triggers
 
@@ -87,7 +93,8 @@ L'Execution Artifact e' valido solo se:
 4. manca una baseline di design abbastanza chiara per procedere;
 5. un checkpoint obbligatorio mostra che il ramo non puo' continuare senza reinterpretare il parent o un contratto condiviso;
 6. una dipendenza tecnica non si comporta come assunto dal Design;
-7. la soluzione semplice sufficiente non e' possibile senza cambiare un vincolo upstream.
+7. la soluzione semplice sufficiente non e' possibile senza cambiare un vincolo upstream;
+8. l'implementazione richiede o scopre architectural contract drift non coperto dal Design Artifact validato.
 
 ## Rationale
 

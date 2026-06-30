@@ -6,7 +6,7 @@ No.
 
 C.O.D.E. Loop is an operating model for governing AI-assisted software development.
 
-The current repository includes a Markdown-first reference implementation, but the paradigm is not tied to Markdown or to a specific tool.
+The current public package includes a Markdown-first reference implementation, but the paradigm is not tied to Markdown or to a specific tool.
 
 ## Is this just documentation?
 
@@ -46,7 +46,7 @@ Sometimes.
 
 That friction is useful when the cost of drift is high.
 
-For small local edits, a full loop may be too heavy.
+For small local edits, Tiny Mode may be enough.
 
 For significant changes, explicit intent, design and validation can prevent much more expensive rework later.
 
@@ -62,6 +62,16 @@ Use the full loop when a change affects:
 6. operational risk;
 7. security or safety;
 8. long-term maintainability.
+
+For the proportional version, see `15-adoption-modes.md`.
+
+## What is the difference between Tiny, Standard and Strict Mode?
+
+Tiny Mode is for local, low-risk changes that still need traceability.
+
+Standard Mode is the normal path for meaningful product or engineering work.
+
+Strict Mode is for changes where silent drift would be costly, risky or hard to detect, especially around architecture, contracts, identifiers, relationships, invariants, auditability, safety or security.
 
 ## Can agents create the artifacts?
 
@@ -101,12 +111,11 @@ C.O.D.E. Loop adds upstream governance.
 
 ## What is the smallest useful version?
 
-For a small but significant change, a minimal loop can be:
+For a small but significant change, Tiny Mode can be:
 
-1. one Concept note;
-2. one Design note;
-3. one Execution note with tests;
-4. one Validation note.
+1. one intent note;
+2. one execution note with evidence;
+3. one validation note.
 
 The artifacts can be short.
 
@@ -123,4 +132,3 @@ If artifacts become long, vague or ignored, they are not helping.
 The goal is not more documents.
 
 The goal is controlled meaning.
-

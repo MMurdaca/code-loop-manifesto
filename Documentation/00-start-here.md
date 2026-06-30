@@ -48,6 +48,18 @@ Execution:
 
 implements the design and produces evidence, tests, mismatch reports and integration notes.
 
+## Use It Proportionally
+
+C.O.D.E. Loop has adoption modes.
+
+Tiny Mode is for small local changes that still deserve traceability.
+
+Standard Mode is for meaningful work that needs visible intent, design and validation.
+
+Strict Mode is for architecture, contracts, identity, data relationships, auditability, safety or other high-risk changes.
+
+The right mode is the smallest one that still protects the meaning of the work.
+
 ## What This Is Not
 
 C.O.D.E. Loop is not a replacement for:
@@ -76,9 +88,9 @@ For practical use:
 
 1. `12-getting-started.md`
 2. `13-minimal-example.md`
-3. `../MyImplementation/code_loop/README.md`
+3. `15-adoption-modes.md`
+4. `../MyImplementation/code_loop/README.md`
 
 For terms:
 
 1. `11-glossary.md`
-

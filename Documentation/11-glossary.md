@@ -68,6 +68,36 @@ The process by which a lower layer reports ambiguity, mismatch, conflict or impr
 
 Escalation allows lower layers to challenge upstream decisions without silently rewriting them.
 
+## Adoption Mode
+
+The chosen level of C.O.D.E. Loop structure for a task.
+
+The public modes are Tiny, Standard and Strict.
+
+## Tiny Mode
+
+A lightweight mode for local, low-risk changes that still need traceability.
+
+## Standard Mode
+
+The default mode for meaningful product or engineering work that needs visible intent, design, execution and validation.
+
+## Strict Mode
+
+A stronger mode for architecture, contracts, data models, identity, relationships, invariants, auditability, safety, security or other high-risk changes.
+
+## Architectural Contract Drift
+
+A change that alters an approved identity, identifier, relationship, invariant, validation criterion or shared contract.
+
+This is especially important when code can keep working while meaning or auditability degrades.
+
+## Drift Policy Mode
+
+The policy used when architectural contract drift is detected.
+
+Allowed modes are `Mitigate`, `Review` and `Strict`.
+
 ## Rushed Execution
 
 The failure mode where implementation begins before intent, constraints, responsibilities and success criteria are explicit enough.
@@ -112,7 +142,6 @@ Evidence may include tests, logs, analysis, constraints, observed mismatch or re
 
 ## Reference Implementation
 
-The current Markdown-first implementation of C.O.D.E. Loop in this repository.
+The current Markdown-first implementation of C.O.D.E. Loop in this public package.
 
 It is one implementation of the paradigm, not the paradigm itself.
-

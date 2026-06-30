@@ -11,7 +11,8 @@ If this is your first time reading about C.O.D.E. Loop, use this order:
 5. `05-artifacts-validation-and-escalation.md`
 6. `12-getting-started.md`
 7. `13-minimal-example.md`
-8. `14-faq.md`
+8. `15-adoption-modes.md`
+9. `14-faq.md`
 
 For the broader argument and context:
 
@@ -25,6 +26,10 @@ For the current implementation:
 
 1. `07-reference-implementation.md`
 2. `../MyImplementation/code_loop/README.md`
+
+For current evidence:
+
+1. `../MyImplementation/Result/README.md`
 
 ## Documents
 
@@ -43,4 +48,4 @@ For the current implementation:
 13. `12-getting-started.md`: first practical workflow.
 14. `13-minimal-example.md`: small end-to-end example.
 15. `14-faq.md`: common questions and answers.
-
+16. `15-adoption-modes.md`: Tiny, Standard and Strict adoption modes.

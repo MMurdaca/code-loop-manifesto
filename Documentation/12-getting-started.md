@@ -6,6 +6,18 @@ The goal is not to create paperwork.
 
 The goal is to make the path from intent to implementation visible.
 
+## Step 0: Choose The Adoption Mode
+
+Before writing artifacts, choose the smallest mode that protects the work.
+
+Use Tiny Mode when the change is local, low-risk and reversible.
+
+Use Standard Mode when the change affects behavior, design or more than one responsibility.
+
+Use Strict Mode when the change can alter architecture, public contracts, data models, identifiers, relationships, invariants, auditability, safety or operational risk.
+
+See `15-adoption-modes.md` for the full mode guide.
+
 ## When To Use The Loop
 
 Use C.O.D.E. Loop when a change may affect:
@@ -19,7 +31,7 @@ Use C.O.D.E. Loop when a change may affect:
 7. long-term maintainability;
 8. agent autonomy.
 
-For tiny local edits, the full loop may be unnecessary.
+For tiny local edits, Tiny Mode may be enough.
 
 ## Step 1: Define The Concept
 
@@ -93,9 +105,18 @@ Ask:
 4. are assumptions still valid?
 5. are risks and mismatches visible?
 
-## Minimal Folder Pattern
+## Minimal Folder Patterns
 
-A simple project can start with:
+Tiny Mode can start with:
+
+```text
+code-loop/
+  intent.md
+  execution.md
+  validation.md
+```
+
+Standard Mode can start with:
 
 ```text
 code-loop/
@@ -106,6 +127,8 @@ code-loop/
   execution.md
   validation.md
 ```
+
+Strict Mode usually needs named artifacts, branch or parent gates, and explicit drift handling.
 
 The exact filenames do not matter.
 
@@ -130,4 +153,3 @@ Recommended reading order:
 7. `50-validation-gates.md`
 8. `60-escalation.md`
 9. `70-artifact-schema.md`
-

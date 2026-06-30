@@ -6,13 +6,12 @@
 - Layer: Cross-layer validation
 - Status: Active
 - Applies To: All artifact validations and propagation decisions
-- Version: 3.0
 
 ## Purpose
 
 Definire le regole minime con cui ogni artifact viene validato prima di propagarsi al layer successivo o di continuare sul ramo corrente.
 
-In V3 il gate valida anche lineage, truthfulness, coerenza dell'artifact tree, stato delle assunzioni e rispetto del principio di semplicita' sufficiente.
+Il gate valida lineage, truthfulness, coerenza dell'artifact tree, stato delle assunzioni, rispetto del principio di semplicita' sufficiente e architectural contract drift, impedendo che venga propagato come normale cambio locale.
 
 ## Scope
 
@@ -26,7 +25,8 @@ Questa rule si applica a Concept Gate, Orchestration Gate, Design Gate, Executio
 4. eventuali condizioni residue aperte;
 5. parent artifact e scope coperto, quando il gate valuta un ramo;
 6. Artifact Tree Overview corrente;
-7. evidenze di test, verifica, fonti o assunzioni dichiarate.
+7. evidenze di test, verifica, fonti o assunzioni dichiarate;
+8. drift impact assessment e drift policy mode, quando rilevanti.
 
 ## Required Outputs
 
@@ -42,7 +42,9 @@ Un Validation Report che dichiari almeno:
 8. lineage and tree consistency result;
 9. truthfulness and assumption check;
 10. propagation decision;
-11. status update richiesto sull'artifact tree.
+11. status update richiesto sull'artifact tree;
+12. architectural drift assessment, quando rilevante;
+13. drift policy mode applicata e relativa decisione.
 
 ## Mandatory Behaviors
 
@@ -57,7 +59,11 @@ Un Validation Report che dichiari almeno:
 9. controllare che parent, child, scope coperto e stato siano coerenti tra detail file e tree overview;
 10. verificare che fatti, deduzioni e ipotesi siano distinguibili quando influenzano il gate;
 11. respingere output che dipendono da risultati, fonti o API inventate;
-12. controllare che la complessita' introdotta sia giustificata dai requisiti.
+12. controllare che la complessita' introdotta sia giustificata dai requisiti;
+13. controllare se il cambiamento altera identita', identificativi, relazioni dati, invarianti o contratti condivisi;
+14. applicare `Review` come default se il drift impact e' reale e non esiste policy locale;
+15. usare almeno Parent Gate quando il drift impatta un parent o sibling; usare Layer Gate quando il contratto e' condiviso nel layer;
+16. marcare come Fail un artifact che implementa drift non dichiarato o non approvato.
 
 ## Forbidden Behaviors
 
@@ -68,7 +74,9 @@ Un Validation Report che dichiari almeno:
 5. usare un Branch Gate quando il problema richiede chiaramente una rivalidazione del parent o del layer;
 6. ignorare divergenze tra artifact tree e artifact detail file;
 7. considerare validata un'assunzione critica solo perche' il downstream l'ha usata;
-8. accettare evidence non riproducibile senza dichiararne il limite.
+8. accettare evidence non riproducibile senza dichiararne il limite;
+9. validare come Pass un cambio che altera contratti architetturali senza drift assessment;
+10. usare Pass with Conditions per permettere Execution in modalita' `Review` o `Strict` prima della decisione richiesta.
 
 ## Validation Requirements
 
@@ -83,7 +91,8 @@ Un gate e' valido solo se il report rende espliciti:
 7. il parent artifact e il branch scope, quando il gate non e' di layer intero;
 8. la coerenza tra tree overview e detail file;
 9. lo stato delle assunzioni critiche;
-10. gli eventuali test o controlli non eseguiti.
+10. gli eventuali test o controlli non eseguiti;
+11. architectural drift impact e drift policy mode, quando il cambiamento tocca contratti architetturali.
 
 ## Escalation Triggers
 
@@ -93,7 +102,9 @@ Un gate e' valido solo se il report rende espliciti:
 4. un checkpoint obbligatorio mostra che il ramo non puo' continuare sulla baseline valida attuale;
 5. il validator rileva un mismatch che richiede revisione upstream;
 6. lineage, parent scope o artifact status non sono ricostruibili;
-7. un'informazione critica e' non verificata ma necessaria alla propagazione.
+7. un'informazione critica e' non verificata ma necessaria alla propagazione;
+8. il gate rileva architectural contract drift non dichiarato dall'artifact valutato;
+9. la drift policy mode richiesta non e' compatibile con l'esito proposto.
 
 ## Rationale
 

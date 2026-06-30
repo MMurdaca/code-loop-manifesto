@@ -2,12 +2,13 @@
 
 ## Scopo
 
-Questa cartella contiene il rule system operativo V3 di C.O.D.E. Loop.
+Questa cartella contiene il rule system operativo di C.O.D.E. Loop.
 
-La V3 parte dalla V2 e aggiunge due famiglie di vincoli:
+Il sistema integra tre famiglie di vincoli:
 
 1. guardrail operativi su accuratezza, ambiguita', truthfulness, preservazione dell'intent e semplicita';
-2. formalizzazione piu' esplicita degli artifact come albero di lavoro e come unica fonte operativa di verita'.
+2. formalizzazione esplicita degli artifact come albero di lavoro e come unica fonte operativa di verita';
+3. controllo esplicito sul drift dei contratti architetturali, in particolare su identita', identificativi, relazioni dati, invarianti e contratti condivisi tra artifact.
 
 Questo file introduce il sistema, ne chiarisce la logica generale e definisce l'ordine di lettura delle rules.
 
@@ -28,7 +29,7 @@ In pratica il sistema cerca di ridurre:
 5. conoscenza operativa non tracciata in artifact;
 6. assunzioni, fonti o funzionalita' inventate per compensare lacune informative.
 
-## Obiettivo Operativo V3
+## Obiettivo Operativo
 
 Lo scopo del sistema e' massimizzare qualita', affidabilita', profondita' tecnica e utilita' concreta dell'assistenza.
 
@@ -42,6 +43,28 @@ Il sistema deve privilegiare:
 6. evidenza artifact-driven rispetto alla memoria conversazionale.
 
 L'obiettivo e' produrre risultati professionali, utilizzabili in contesti reali e sostenibili nel tempo.
+
+## Architectural Contract Drift
+
+Una richiesta localmente implementabile puo' cambiare il significato di un contratto gia' approvato.
+
+Questo tipo di drift include cambiamenti a:
+
+1. identita' di entita' o oggetti;
+2. stabilita' degli identificativi;
+3. relazioni dati;
+4. ownership o collegamenti simili a foreign key;
+5. invarianti;
+6. contratti condivisi tra parent e sibling artifact;
+7. criteri di validazione gia' approvati.
+
+Quando emerge questo rischio, la richiesta non puo' essere trattata automaticamente come nuovo root indipendente o come normale dettaglio di execution.
+
+La policy di gestione drift ha tre modi:
+
+1. `Mitigate`: procedere solo con mitigazione documentata, condizioni esplicite e gate adeguato;
+2. `Review`: fermarsi prima dell'implementazione e chiedere approvazione o re-validation del parent. Questo e' il default quando non esiste una policy locale esplicita;
+3. `Strict`: bloccare l'execution fino a revisione upstream e re-validation.
 
 ## Come Va Letto Il Sistema
 
@@ -65,7 +88,7 @@ Il bundle definisce il comportamento generale.
 
 Se un progetto richiede vincoli locali, brief, esempi o istruzioni di avvio, questi vanno aggiunti fuori da questo bundle.
 
-## Modello Artifact V3
+## Modello Artifact
 
 Ogni elemento di lavoro esiste operativamente come artifact.
 
@@ -91,9 +114,9 @@ Esempio sintetico di tree overview:
 A1 System Root [ACTIVE]
   A1.1 Component Design [COMPLETED]
   A1.2 Architecture Definition [READY_FOR_VALIDATION]
-  A1.3 Execution Flow [IN_PROGRESS]
-    A1.3.1 Planner Definition [IN_PROGRESS]
-    A1.3.2 Execution Layer [BLOCKED]
+  A1.4 Execution Flow [IN_PROGRESS]
+    A1.4.1 Planner Definition [IN_PROGRESS]
+    A1.4.2 Execution Layer [BLOCKED]
 ```
 
 Esempio tabellare equivalente:
@@ -102,7 +125,7 @@ Esempio tabellare equivalente:
 ID       Artifact                 Parent   Status
 A1       System Root              N/A      ACTIVE
 A1.1     Component Design         A1       COMPLETED
-A1.3.2   Execution Layer          A1.3     IN_PROGRESS
+A1.4.2   Execution Layer          A1.4     IN_PROGRESS
 ```
 
 ## Glossario Operativo Minimo
@@ -121,6 +144,8 @@ I termini seguenti hanno significato operativo stabile:
 10. Branch Gate: gate applicato a un child artifact e al suo parent diretto quando il cambiamento resta locale al ramo.
 11. Parent Gate: gate applicato quando il cambiamento altera copertura, contratti condivisi o coerenza complessiva del parent.
 12. Layer Gate: gate applicato quando l'effetto del cambiamento non riguarda piu' un solo parent ma il layer nel suo insieme.
+13. Architectural Contract Drift: cambiamento che altera identita', identificativi, relazioni dati, invarianti, criteri di validazione o contratti condivisi gia' approvati.
+14. Drift Policy Mode: modo operativo che governa il drift architetturale; valori ammessi: `Mitigate`, `Review`, `Strict`.
 
 ## Default Minimo Per Task Piccoli
 
@@ -204,6 +229,8 @@ Quando devi validare un cambiamento, usa il gate piu' piccolo che copre davvero 
 2. usa un Parent Gate se il cambiamento altera la copertura, i contratti condivisi o la coerenza tra sibling dello stesso parent;
 3. usa un Layer Gate se l'effetto non e' piu' riconducibile a un solo parent o impatta il layer nel suo insieme.
 
+Se il cambiamento altera identita', relazioni dati, invarianti o contratti condivisi, non usare un Branch Gate locale salvo policy `Mitigate` esplicita e condizioni tracciate. In assenza di policy locale, applica `Review`.
+
 ## Cosa Non Dare Per Scontato
 
 Il sistema non autorizza a dare per scontato:
@@ -213,13 +240,16 @@ Il sistema non autorizza a dare per scontato:
 3. autorizzazione a cambiare scope, contratto o criteri di successo;
 4. equivalenza tra soluzione veloce e soluzione coerente con il sistema;
 5. informazioni, API, fonti, metriche o funzionalita' non verificate;
-6. comunicazione laterale implicita tra nodi dell'albero.
+6. comunicazione laterale implicita tra nodi dell'albero;
+7. autorizzazione implicita a cambiare identita', identificativi, relazioni dati, invarianti o contratti condivisi.
 
 ## Regola Mentale Minima
 
 Una sintesi onesta del sistema e' questa:
 
 "Non compensare in silenzio cio' che non e' chiaro, non cambiare implicitamente il layer superiore, non inventare cio' che non e' verificato e non propagare qualcosa che non sai spiegare o validare."
+
+"Non trasformare un cambio di identita', relazione o contratto condiviso in una normale modifica locale."
 
 ## Quando Il Sistema E' Applicato Bene
 
@@ -239,7 +269,8 @@ Inoltre deve poter capire senza inferenze implicite:
 2. quale parte del parent copriva;
 3. quali checkpoint sono stati superati o falliti;
 4. quando un problema e' rimasto locale e quando e' risalito;
-5. quale stato hanno i nodi dell'artifact tree.
+5. quale stato hanno i nodi dell'artifact tree;
+6. se un cambiamento architetturale e' stato mitigato, revisionato o bloccato.
 
 ## Limite Da Tenere Presente
 

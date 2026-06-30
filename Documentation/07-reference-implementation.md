@@ -10,7 +10,7 @@ The paradigm is the governance model:
 Intent -> Artifact -> Validation -> Controlled Propagation -> Software
 ```
 
-The current repository implements that model with Markdown because Markdown is readable, versionable and easy for both humans and agents to consume.
+This public package implements that model with Markdown because Markdown is readable, versionable and easy for both humans and agents to consume.
 
 This is a practical choice, not a permanent constraint.
 
@@ -20,51 +20,47 @@ The important property is not the file format.
 
 The important property is that the work remains explicit, reviewable and governed.
 
-## Repository Structure
+## Standalone Package Structure
 
-The repository separates the paradigm from its implementation.
+The public package separates explanation, rules and evidence recap.
 
-The foundation documents define:
+`Documentation/` explains:
 
 1. what C.O.D.E. Loop is;
-2. what it is not;
-3. the glossary;
-4. the non-negotiable principles;
-5. the governance model.
+2. what problem it addresses;
+3. the four-layer model;
+4. validation and escalation;
+5. adoption modes;
+6. limits and open questions.
 
-The model documents define:
+`MyImplementation/code_loop/` contains the current public reference rule bundle.
 
-1. layer responsibilities;
-2. propagation rules;
-3. validation gates;
-4. escalation types;
-5. artifact hierarchy;
-6. artifact tree behavior;
-7. operational guardrails.
+`MyImplementation/Result/` contains a standalone recap of the evidence collected so far.
 
-The rule bundles provide concrete operating instructions for agents or teams.
+This package is intended to remain readable without material outside this public directory.
 
-The pilot documents and runs provide preliminary evidence and examples.
+## Current Public Rule Bundle
 
-The public reference rule bundle is available in:
+The public rule bundle is the current Markdown-first implementation.
 
-```text
-../MyImplementation/code_loop/
-```
+It includes:
 
-## Rule Bundles
+1. the Concept, Orchestration, Design and Execution layer rules;
+2. validation gates;
+3. escalation rules;
+4. artifact schema rules;
+5. artifact tree concepts;
+6. checkpointing and parent-child lineage;
+7. guardrails for truthfulness, ambiguity handling, simplicity and intent preservation;
+8. architectural contract drift handling for identity, identifiers, relationships, invariants and shared contracts.
 
-The repository currently preserves multiple versions of the rule system.
+The public drift policy modes are:
 
-The first rule bundle defines the basic layer flow.
+1. `Mitigate`: proceed only with documented mitigation, explicit conditions and suitable validation;
+2. `Review`: pause and request approval or parent re-validation before implementation;
+3. `Strict`: block execution until upstream contract revision and re-validation happen.
 
-The second version adds branching, checkpointing and parent-child artifact relationships.
-
-The third version adds stronger operational guardrails, including artifact tree concepts, truthfulness, ambiguity handling, simplicity and intent preservation.
-
-Keeping these versions separate is intentional.
-
-It makes the evolution of the paradigm visible and prevents newer ideas from being confused with older baselines.
+When no local drift policy is declared, the default is `Review`.
 
 ## Artifacts
 
@@ -98,15 +94,19 @@ A lower layer can challenge an upper layer.
 
 It just has to do so explicitly.
 
-## Evidence From Pilots
+## Evidence Recap
 
-The repository includes comparative pilots with and without C.O.D.E. Loop.
+The public package does not require raw pilot folders to be useful.
 
-These pilots are not definitive proof.
+A standalone evidence recap is available in:
 
-They are early evidence.
+```text
+../MyImplementation/Result/README.md
+```
 
-They suggest that the loop improves:
+The evidence is preliminary.
+
+It suggests that the loop improves:
 
 1. visibility of assumptions and constraints;
 2. governance discipline;
@@ -114,7 +114,7 @@ They suggest that the loop improves:
 4. surfacing of risks and mismatches;
 5. separation between intent, design and implementation.
 
-They also show a useful tradeoff: a non-loop run may sometimes produce a more complete demo faster, while the loop produces stronger governance and traceability.
+It also shows a useful tradeoff: a non-loop run may sometimes produce a more complete demo faster, while the loop produces stronger governance and traceability.
 
 That tradeoff matters.
 

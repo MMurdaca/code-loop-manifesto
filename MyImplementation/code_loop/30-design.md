@@ -6,13 +6,12 @@
 - Layer: Design
 - Status: Active
 - Applies To: Contracts, interfaces, data models, edge cases, validation strategy
-- Version: 3.0
 
 ## Purpose
 
 Governare il layer Design in modo che la struttura operativa venga tradotta in una soluzione implementabile, coerente e verificabile.
 
-In V3 il Design deve preservare truthfulness tecnica: non puo' inventare API, contratti, capacita' o garanzie non verificate.
+Il Design deve preservare truthfulness tecnica: non puo' inventare API, contratti, capacita' o garanzie non verificate, e deve rilevare e governare esplicitamente l'architectural contract drift prima che arrivi all'Execution.
 
 ## Scope
 
@@ -24,7 +23,8 @@ Questa rule si applica alle decisioni che fissano contratti, interfacce, modelli
 2. vincoli Concept gia' propagati;
 3. change o exception approvate che impattano il design;
 4. Artifact Tree Overview corrente;
-5. evidenze tecniche verificate o dichiarate come ipotesi.
+5. evidenze tecniche verificate o dichiarate come ipotesi;
+6. drift policy mode locale, se dichiarata.
 
 ## Required Outputs
 
@@ -40,7 +40,9 @@ Uno o piu' Design Artifact che, per ciascun ramo rilevante, dichiarino almeno:
 8. verified technical facts;
 9. design assumptions;
 10. trade-off analysis, quando esistono alternative materiali;
-11. Artifact Tree Overview status update, se il design cambia lo stato o la struttura dei rami.
+11. Artifact Tree Overview status update, se il design cambia lo stato o la struttura dei rami;
+12. architectural drift impact, quando il design modifica o propone di modificare identita', identificativi, relazioni dati, invarianti o contratti condivisi;
+13. drift policy mode applicata: `Mitigate`, `Review` o `Strict`.
 
 ## Mandatory Behaviors
 
@@ -53,7 +55,11 @@ Uno o piu' Design Artifact che, per ciascun ramo rilevante, dichiarino almeno:
 7. aprire escalation se il design rivela incoerenze non risolvibili localmente;
 8. distinguere scelte tecniche verificate da ipotesi di design;
 9. scegliere la soluzione piu' semplice che soddisfa completamente requisiti e vincoli;
-10. definire input, output, constraints e acceptance criteria del ramo in modo consumabile dall'Execution.
+10. definire input, output, constraints e acceptance criteria del ramo in modo consumabile dall'Execution;
+11. trattare cambiamenti a identita', identificativi, relazioni dati, invarianti o contratti condivisi come architectural contract drift da valutare prima dell'implementazione;
+12. usare `Review` come default quando il progetto non dichiara una drift policy mode locale;
+13. in modalita' `Mitigate`, dichiarare perche' la mitigazione e' sufficiente e quali condizioni restano aperte;
+14. in modalita' `Strict`, marcare il ramo come bloccato finche' il parent non viene rivisto e rivalidato.
 
 ## Forbidden Behaviors
 
@@ -64,7 +70,9 @@ Uno o piu' Design Artifact che, per ciascun ramo rilevante, dichiarino almeno:
 5. lasciare implicito se un contratto vale solo per il ramo corrente o per piu' rami sibling;
 6. inventare API, librerie, capacita' di piattaforma o garanzie non verificate;
 7. introdurre astrazioni premature non giustificate dai requisiti;
-8. nascondere un trade-off rilevante dietro una singola scelta presentata come inevitabile.
+8. nascondere un trade-off rilevante dietro una singola scelta presentata come inevitabile;
+9. presentare un cambio di identita' o relazione dati come semplice dettaglio tecnico locale;
+10. usare una mitigazione locale per evitare una review o re-validation richiesta dalla drift policy.
 
 ## Validation Requirements
 
@@ -76,7 +84,9 @@ Il Design Artifact e' valido solo se:
 4. i rischi implementativi rilevanti sono stati nominati;
 5. il parent scope covered e le dipendenze con sibling sono abbastanza chiari da sostenere il downstream;
 6. le assunzioni tecniche critiche sono verificate o marcate come condizioni residue;
-7. la complessita' introdotta e' proporzionata ai requisiti.
+7. la complessita' introdotta e' proporzionata ai requisiti;
+8. l'eventuale architectural contract drift e' nominato, classificato e governato dalla drift policy mode corretta;
+9. il design non consente all'Execution di modificare contratti condivisi senza gate appropriato.
 
 ## Escalation Triggers
 
@@ -86,7 +96,8 @@ Il Design Artifact e' valido solo se:
 4. emerge un miglioramento architetturale che impatta il livello superiore;
 5. due rami di design richiedono una ridefinizione del parent o di un contratto condiviso;
 6. una decisione tecnica critica non puo' essere verificata con le informazioni disponibili;
-7. la soluzione piu' semplice sufficiente richiede cambiare scope o criteri di successo.
+7. la soluzione piu' semplice sufficiente richiede cambiare scope o criteri di successo;
+8. una richiesta o scelta di design cambia il significato di un identificativo, relazione dati, invariante o contratto condiviso gia' approvato.
 
 ## Rationale
 

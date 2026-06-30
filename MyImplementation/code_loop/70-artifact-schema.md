@@ -6,16 +6,17 @@
 - Layer: Cross-layer schema
 - Status: Active
 - Applies To: All artifacts produced under C.O.D.E. Loop
-- Version: 3.0
 
 ## Purpose
 
 Definire la struttura minima comune che rende gli artifact leggibili, verificabili e propagabili tra layer anche quando il lavoro viene scomposto in rami parent-child.
 
-In V3 lo schema distingue esplicitamente:
+Lo schema distingue esplicitamente:
 
 1. Artifact Tree Overview, cioe' la vista globale di tracking;
 2. Artifact Detail File, cioe' il documento operativo che contiene la logica del singolo artifact.
+
+Lo schema include anche campi espliciti per tracciare architectural contract drift quando rilevante.
 
 ## Scope
 
@@ -29,7 +30,8 @@ Questa rule si applica a Concept Artifact, Orchestration Artifact, Design Artifa
 4. evidenze, mismatch e condizioni residue;
 5. Artifact Tree Overview corrente;
 6. relazioni parent-child approvate o proposte;
-7. fatti, deduzioni, ipotesi e assunzioni dichiarate.
+7. fatti, deduzioni, ipotesi e assunzioni dichiarate;
+8. drift impact assessment, quando rilevante.
 
 ## Required Outputs
 
@@ -56,7 +58,10 @@ Ogni artifact deve dichiarare almeno:
 19. Constraints;
 20. Acceptance Criteria;
 21. Children, se presenti o previsti;
-22. Facts, Deductions and Hypotheses, quando l'incertezza e' rilevante.
+22. Facts, Deductions and Hypotheses, quando l'incertezza e' rilevante;
+23. Architectural Drift Impact, quando il cambiamento tocca identita', identificativi, relazioni dati, invarianti o contratti condivisi;
+24. Drift Policy Mode, quando esiste drift impact;
+25. Drift Decision, quando il gate o l'escalation decide mitigazione, review o blocco.
 
 Convenzione minima raccomandata:
 
@@ -64,7 +69,8 @@ Convenzione minima raccomandata:
 2. per child artifact attivi usare parent reale, branch ID stabile, scope coperto dichiarato e `Propagation Scope Status: active-child` o equivalente chiaro;
 3. gli stati `deferred`, `not yet decomposed` e `out of scope` vanno resi leggibili soprattutto nella copertura del parent, non usati per lasciare ambiguo lo stato del child artifact;
 4. ogni child artifact deve avere un solo parent diretto;
-5. ogni informazione operativa deve vivere nel detail file, non solo nella overview o nella conversazione.
+5. ogni informazione operativa deve vivere nel detail file, non solo nella overview o nella conversazione;
+6. i campi drift sono obbligatori solo quando il cambiamento ha impatto architetturale, ma non possono essere omessi per rendere locale un problema cross-contract.
 
 Ogni layer deve inoltre includere almeno il contenuto minimo seguente:
 
@@ -116,22 +122,22 @@ Ogni artifact operativo deve avere un dettaglio leggibile.
 Schema standard raccomandato:
 
 ```yaml
-id: A1.3.2
+id: A1.4.2
 name: Execution Layer
 layer: Execution
-parent: A1.3
+parent: A1.4
 parent_layer: Design
-branch_id: A1.3.execution
+branch_id: A1.4.execution
 status: IN_PROGRESS
 version: 1
 source_inputs:
-  - A1.3
+  - A1.4
 validation_state: NOT_VALIDATED
 last_updated_context: Short description of the current update.
 parent_scope_covered: Defines the exact parent scope covered by this artifact.
 propagation_scope_status: active-child
 sibling_dependencies:
-  - A1.3.1
+  - A1.4.1
 description: >
   Describes responsibilities and behavior of the artifact.
 rationale: >
@@ -157,8 +163,11 @@ facts_deductions_hypotheses:
     - Assumption that still needs confirmation.
 open_issues:
   - Issue or none.
+architectural_drift_impact: none | identity | relationship | invariant | shared-contract | validation-criteria
+drift_policy_mode: N/A | Mitigate | Review | Strict
+drift_decision: N/A | mitigation accepted | review required | blocked pending upstream re-validation
 children:
-  - A1.3.2.1
+  - A1.4.2.1
 ```
 
 Lo schema puo' essere espresso in Markdown, YAML-like text o tabella, purche' i campi siano leggibili e stabili.
@@ -234,7 +243,8 @@ Lo stato di un nodo nell'overview deve corrispondere allo stato operativo dichia
 7. evitare artifact che dipendono dalla sola memoria conversazionale;
 8. tenere separata la vista di tracking dalla logica operativa;
 9. aggiornare tree overview e detail file in modo coerente;
-10. dichiarare facts, deductions e hypotheses quando influenzano decisioni o validazione.
+10. dichiarare facts, deductions e hypotheses quando influenzano decisioni o validazione;
+11. dichiarare architectural drift impact, drift policy mode e drift decision quando il lavoro tocca contratti architetturali.
 
 ## Forbidden Behaviors
 
@@ -247,7 +257,8 @@ Lo stato di un nodo nell'overview deve corrispondere allo stato operativo dichia
 7. usare l'Artifact Tree Overview come sostituto del detail file;
 8. conservare decisioni operative solo in note conversazionali;
 9. creare livelli concettuali intermedi non rappresentati da artifact quando contengono lavoro operativo;
-10. lasciare che sibling comunichino tramite assunzioni non dichiarate.
+10. lasciare che sibling comunichino tramite assunzioni non dichiarate;
+11. omettere campi drift quando servono a capire se un cambio modifica contratti gia' approvati.
 
 ## Validation Requirements
 
@@ -261,7 +272,8 @@ Uno schema artifact e' valido solo se:
 6. rispetta il minimo di contenuto richiesto dal layer di appartenenza;
 7. e' coerente con l'Artifact Tree Overview;
 8. non richiede conoscenza implicita per ricostruire lineage, stato o decisioni;
-9. dichiara le assunzioni che influenzano propagazione o validazione.
+9. dichiara le assunzioni che influenzano propagazione o validazione;
+10. dichiara drift impact e drift decision quando il cambiamento tocca identita', relazioni dati, invarianti o contratti condivisi.
 
 ## Escalation Triggers
 
@@ -272,7 +284,8 @@ Uno schema artifact e' valido solo se:
 5. la mappa parent-child o la copertura del parent non sono piu' leggibili;
 6. overview e detail file divergono su parent, stato o scope;
 7. un sibling dependency non dichiarato diventa necessario per proseguire;
-8. un dettaglio operativo esiste solo fuori dagli artifact.
+8. un dettaglio operativo esiste solo fuori dagli artifact;
+9. il drift impact necessario alla validazione non e' dichiarato nell'artifact.
 
 ## Rationale
 
@@ -280,4 +293,4 @@ Se gli artifact non hanno una forma minima stabile, il sistema perde tracciabili
 
 Questa rule rende gli artifact consumabili sia da umani sia da agenti.
 
-La V3 formalizza l'albero degli artifact come vista di tracking, ma mantiene la logica operativa dentro i detail file per evitare canali paralleli e ambigui.
+L'albero degli artifact e' una vista di tracking, mentre la logica operativa resta dentro i detail file per evitare canali paralleli e ambigui.

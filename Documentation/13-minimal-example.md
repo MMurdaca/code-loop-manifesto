@@ -1,10 +1,12 @@
 # Minimal Example
 
-This example shows C.O.D.E. Loop applied to a small feature.
+This example shows C.O.D.E. Loop applied to a small feature in Standard Mode.
 
 The goal is not to show every possible artifact field.
 
 The goal is to show the shape of the reasoning.
+
+For smaller changes, Tiny Mode may be enough. For contract, identity, audit or architectural changes, use Strict Mode. See `15-adoption-modes.md`.
 
 ## Scenario
 
@@ -200,4 +202,3 @@ The loop did not make the feature complicated.
 It made the decision path visible.
 
 The important moment was not the code itself. The important moment was catching the ambiguous TTL behavior before implementation silently chose one interpretation.
-

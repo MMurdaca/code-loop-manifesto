@@ -2,13 +2,19 @@
 
 ## Current Evidence
 
-C.O.D.E. Loop has been tested through preliminary comparative pilots.
+C.O.D.E. Loop has been tested through preliminary comparative pilots and stress scenarios.
 
-The basic method is simple:
+The public package includes a standalone evidence recap in:
+
+```text
+../MyImplementation/Result/README.md
+```
+
+The basic evaluation method is simple:
 
 1. run the same or comparable task with C.O.D.E. Loop available;
 2. run it without the loop;
-3. compare the outputs using a scorecard;
+3. compare the outputs using governance and technical criteria;
 4. examine not only the final code, but also the rationale, risks, assumptions and validation evidence.
 
 The early results suggest that C.O.D.E. Loop is strongest where governance matters.
@@ -61,11 +67,11 @@ C.O.D.E. Loop introduces friction.
 
 That friction is intentional, but it must be proportional.
 
-For small local changes, a full loop may be unnecessary.
+For small local changes, Tiny Mode may be enough.
 
-For throwaway prototypes, the cost may exceed the value.
+For normal product and engineering work, Standard Mode is usually a better default.
 
-For high-risk changes, architectural work, multi-agent workflows, contract changes or long-lived systems, the cost of explicit artifacts may be far lower than the cost of silent drift.
+For high-risk changes, architectural work, multi-agent workflows, contract changes, data relationship changes or long-lived systems, Strict Mode may be cheaper than silent drift.
 
 The right question is not:
 
@@ -108,4 +114,3 @@ Several questions remain open:
 These questions are part of the work.
 
 C.O.D.E. Loop should evolve through evidence, not slogans.
-

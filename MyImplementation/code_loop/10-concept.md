@@ -6,13 +6,12 @@
 - Layer: Concept
 - Status: Active
 - Applies To: Intent definition and intent revisions
-- Version: 3.0
 
 ## Purpose
 
 Governare il layer Concept in modo che l'intenzione venga formalizzata prima di ogni decomposizione strutturale o decisione implementativa.
 
-In V3 il Concept deve anche rendere espliciti ambiguita', assunzioni, fatti verificati, ipotesi e criteri di qualita' che governeranno il downstream.
+Il Concept deve anche rendere espliciti ambiguita', assunzioni, fatti verificati, ipotesi, criteri di qualita', identita', identificativi, relazioni dati, invarianti e contratti condivisi che governeranno il downstream.
 
 ## Scope
 
@@ -27,6 +26,7 @@ Questa rule si applica a ogni definizione iniziale di intent e a ogni revisione 
 5. richieste upward approvate che impattano l'intent;
 6. evidenze, fonti o contesto verificato;
 7. incertezze o informazioni mancanti emerse prima della decomposizione.
+8. drift policy mode locale, se gia' definita dal progetto.
 
 ## Required Outputs
 
@@ -41,7 +41,9 @@ Un Concept Artifact che dichiari almeno:
 7. known unknowns;
 8. facts, deductions and hypotheses;
 9. quality bar e priorita' operative;
-10. candidate child scope, se il Concept e' troppo ampio per un solo ramo downstream.
+10. candidate child scope, se il Concept e' troppo ampio per un solo ramo downstream;
+11. assunzioni su identita', relazioni e invarianti, quando rilevanti;
+12. drift policy mode locale, se diversa dal default `Review`.
 
 ## Mandatory Behaviors
 
@@ -54,7 +56,8 @@ Un Concept Artifact che dichiari almeno:
 7. distinguere fatti verificati, deduzioni e ipotesi prima che il downstream le trasformi in decisioni operative;
 8. chiedere chiarimenti quando un'ambiguita' cambia obiettivi, vincoli, priorita' o criteri di successo;
 9. preservare l'intent anche quando un'alternativa locale sembra piu' semplice o piu' veloce;
-10. definire il minimo livello di qualita' atteso in termini di affidabilita', utilita' concreta e verificabilita'.
+10. definire il minimo livello di qualita' atteso in termini di affidabilita', utilita' concreta e verificabilita';
+11. dichiarare esplicitamente quando un identificativo, una relazione dati o un'invariante fa parte dell'intent approvato.
 
 ## Forbidden Behaviors
 
@@ -64,7 +67,8 @@ Un Concept Artifact che dichiari almeno:
 4. lasciare indeterminati gli obiettivi principali quando il downstream dipende da essi;
 5. presentare ipotesi, stime o deduzioni come fatti verificati;
 6. permettere che l'Orchestration inventi intent mancante invece di richiedere chiarimento;
-7. allargare lo scope per migliorare localmente la soluzione senza approvazione upward.
+7. allargare lo scope per migliorare localmente la soluzione senza approvazione upward;
+8. lasciare implicito se un identificativo o una relazione dati e' stabile, modificabile, derivata o solo descrittiva quando il downstream dipende da questo.
 
 ## Validation Requirements
 
@@ -76,7 +80,8 @@ Il Concept Artifact e' valido solo se:
 4. il downstream puo' iniziare l'orchestrazione senza dover inventare l'intent;
 5. la futura scomposizione in rami non richiede di reinterpretare il Concept;
 6. le assunzioni critiche sono approvate o esplicitamente bloccanti;
-7. il quality bar non contraddice vincoli, tempi o priorita' dichiarate.
+7. il quality bar non contraddice vincoli, tempi o priorita' dichiarate;
+8. identita', relazioni e invarianti critiche sono abbastanza esplicite da permettere drift detection nei layer successivi.
 
 ## Escalation Triggers
 
@@ -85,7 +90,8 @@ Il Concept Artifact e' valido solo se:
 3. emerge una revisione sostanziale dell'intent;
 4. il downstream segnala che il Concept e' insufficiente o ambiguo;
 5. non e' possibile distinguere fatti verificati da ipotesi su elementi critici;
-6. una richiesta tenta di sostituire il Concept con una soluzione implementativa gia' decisa.
+6. una richiesta tenta di sostituire il Concept con una soluzione implementativa gia' decisa;
+7. una richiesta cambia la semantica di identita', identificativi, relazioni dati o invarianti dichiarate nel Concept.
 
 ## Rationale
 
